@@ -48,7 +48,7 @@ openai_secret_manager set $openai_secret_name --file openai_secret.json
 
 # Download do script
 echo "Baixando o script..."
-curl -O https://example.com/meu_script.py
+curl -O https://raw.githubusercontent.com/cartoonbr/provedorddos/main/meu_script.py
 
 # Execução do script
 echo "Executando o script..."
