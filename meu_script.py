@@ -105,7 +105,7 @@ def send_email(subject, message, from_email, to_email):
     body = message
 msg.attach(MIMEText(body, 'plain'))
 
-    try:
+ try:
     server = smtplib.SMTP(smtp_server, smtp_port)
     server.starttls()
     server.login(smtp_username, smtp_password)
@@ -113,7 +113,8 @@ msg.attach(MIMEText(body, 'plain'))
     server.quit()
     logger.info("Notificação por e-mail enviada com sucesso.")
 except Exception as e:
-    logger.error("Erro ao enviar notificação por e-mail: " + str(e))
+    logger.error(f"Erro ao enviar notificação por e-mail: {str(e)}")
+
 
 def detect_anomaly(data):
     """
