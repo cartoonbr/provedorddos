@@ -105,124 +105,98 @@ def unblock_ip(ip_address):
     logger.info(f"Desbloqueando endereço IP {ip_address}...")
     os.system(f"/ip firewall address-list remove [find address={ip_address}]")
 
-def notify_admin
-(subject, message):
-"""
-Envia uma notificação para o administrador do sistema.
-"""
-send_email(subject, message, "from@example.com", "to@example.com")
+def notify_admin(subject, message):
+    """
+    Envia uma notificação para o administrador do sistema.
+    """
+    send_email(subject, message, "from@example.com", "to@example.com")
 
 def send_email(subject, message, from_email, to_email):
-"""
-Envia uma notificação por e-mail.
-"""
-msg = MIMEMultipart()
-msg['From'] = from_email
-msg['To'] = to_email
-msg['Subject'] = subject
+    """
+    Envia uma notificação por e-mail.
+    """
+    msg = MIMEMultipart()
+    msg['From'] = from_email
+    msg['To'] = to_email
+    msg['Subject'] = subject
 
-# Corpo do e-mail
-body = message
-msg.attach(MIMEText(body, 'plain'))
+    # Corpo do e-mail
+    body = message
+    msg.attach(MIMEText(body, 'plain'))
 
-try:
-    server = smtplib.SMTP(smtp_server, smtp_port)
-    server.starttls()
-    server.login(smtp_username, smtp_password)
-    server.send_message(msg)
-    server.quit()
-    logger.info("Notificação por e-mail enviada com sucesso.")
-except Exception as e:
-    logger.error(f"Erro ao enviar notificação por e-mail: {str(e)}")
+    try:
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(smtp_username, smtp_password)
+        server.send_message(msg)
+        server.quit()
+        logger.info("Notificação por e-mail enviada com sucesso.")
+    except Exception as e:
+        logger.error(f"Erro ao enviar notificação por e-mail: {str(e)}")
+
 def detect_anomaly(data):
-"""
-Detecta anomalias no tráfego de rede utilizando um modelo de machine learning.
-"""
-if anomaly_detector is None or scaler_mean is None or scaler_std is None:
-return None data_scaled = scaler.transform(data)
-predictions = anomaly_detector.predict(data_scaled)
-return np.mean(predictions)
-data_scaled = scaler.transform(data)
-predictions = anomaly_detector.predict(data_scaled)
-return np.mean(predictions)
+    """
+    Detecta anomalias no tráfego de rede utilizando um modelo de machine learning.
+    """
+    if anomaly_detector is None or scaler_mean is None or scaler_std is None:
+        return None
+    
+    data_scaled = scaler.transform(data)
+    predictions = anomaly_detector.predict(data_scaled)
+    return np.mean(predictions)
+
 def update_model():
-"""
-Atualiza o modelo de detecção de anomalias com novos dados e salva o modelo atualizado.
-"""
-if db_connection is None:
-return
+    """
+    Atualiza o modelo de detecção de anomalias com novos dados e salva o modelo atualizado.
+    """
+    if db_connection is None:
+        return
 
-# Recupera os dados de tráfego de rede
-traffic_data = retrieve_traffic_data()
+    # Recupera os dados de tráfego de rede
+    traffic_data = retrieve_traffic_data()
 
-# Treina um novo modelo com base nos dados atualizados
-new_model = train_anomaly_detection_model(traffic_data)
+    # Treina um novo modelo com base nos dados atualizados
+    new_model = train_anomaly_detection_model(traffic_data)
 
-# Salva o novo modelo
-save_model(new_model)
+    # Salva o novo modelo
+    save_model(new_model)
+
 def analyze_text(text):
-"""
-Analisa o texto utilizando a OpenAI API.
-"""
-if api_key is None:
-return None 
-response = openai.Completion.create(
-    engine="text-davinci-003",
-    prompt=text,
-    max_tokens=100,
-    n=1,
-    stop=None,
-    temperature=0.5
-)
+    """
+    Analisa o texto utilizando a OpenAI API.
+    """
+    if api_key is None:
+        return None
 
-if response and len(response.choices) > 0:
-    return response.choices[0].text.strip()
-else:
-    return None
-response = openai.Completion.create(
-    engine="text-davinci-003",
-    prompt=text,
-    max_tokens=100,
-    n=1,
-    stop=None,
-    temperature=0.5
-)
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=text,
+        max_tokens=100,
+        n=1,
+        stop=None,
+        temperature=0.5
+    )
 
-if response and len(response.choices) > 0:
-    return response.choices[0].text.strip()
-else:
-    return None
-def process_log(log):
-"""
-Processa um log de tráfego de rede.
-"""
-# Realiza análise de texto do log
-analysis = analyze_text(log)
-
-# Executa ações com base na análise
-if analysis:
-    if "anomalia" in analysis:
-        block_ip(log.ip_address)
-        notify_admin("Detecção de Anomalia", f"Uma anomalia foi detectada no endereço IP {log.ip_address}. O IP foi bloqueado.")
+    if response and len(response.choices) > 0:
+        return response.choices[0].text.strip()
     else:
-        unblock_ip(log.ip_address)
-        notify_admin("Anomalia Resolvida", f"A anomalia no endereço IP {log.ip_address} foi resolvida. O IP foi desbloqueado.")
-def store_traffic_data(data):
-"""
-Armazena os dados de tráfego no banco de dados.
-"""
-if db_connection is None:
-return
+        return None
 
-try:
-    cursor = db_connection.cursor()
-    for log in data:
-        cursor.execute("INSERT INTO traffic_logs (ip_address, timestamp, log_data) VALUES (%s, %s, %s)",
-                       (log.ip_address, log.timestamp, log.log_data))
-    db_connection.commit()
-    logger.info("Dados de tráfego armazenados com sucesso no banco de dados.")
-except Exception as e:
-    logger.error(f"Erro ao armazenar dados de tráfego no banco de dados: {str(e)}")
+def process_log(log):
+    """
+    Processa um log de tráfego de rede.
+    """
+    # Realiza análise de texto do log
+    analysis = analyze_text(log)
+
+    # Executa ações com base na análise
+    if analysis:
+        if "anomalia" in analysis:
+            block_ip(log.ip_address)
+            notify_admin("Detecção de Anomalia", f"Uma anomalia foi detectada no endereço IP {log.ip_address}. O IP foi bloqueado.")
+        else:
+            unblock_ip(log.ip_address)
+            notify_admin("Anomalia Resolvida", f"A anomalia no endereço IP {log.ip_address} foi resolvida. O IP foi desbloqueado.")
 
 def retrieve_traffic_data():
     """
@@ -230,53 +204,38 @@ def retrieve_traffic_data():
     """
     try:
         cursor = db_connection.cursor()
-        cursor.execute("SELECT data FROM traffic_data")
+        cursor.execute("SELECT ip_address, timestamp, log_data FROM traffic_logs")
         rows = cursor.fetchall()
-        traffic_data = [row[0] for row in rows]
-        logger.info("Dados de tráfego recuperados com sucesso.")
+        traffic_data = []
+        for row in rows:
+            ip_address, timestamp, log_data = row
+            log = TrafficLog(ip_address, timestamp, log_data)
+            traffic_data.append(log)
         return traffic_data
     except Exception as e:
-        logger.error(f"Erro ao recuperar dados de tráfego: {str(e)}")
+        logger.error(f"Erro ao recuperar dados de tráfego do banco de dados: {str(e)}")
         return []
 
-Recupera os dados de tráfego armazenados no banco de dados.
-"""
-if db_connection is None:
-return []
-
-try:
-    cursor = db_connection.cursor()
-    cursor.execute("SELECT ip_address, timestamp, log_data FROM traffic_logs")
-    rows = cursor.fetchall()
-    traffic_data = []
-    for row in rows:
-        ip_address, timestamp, log_data = row
-        log = TrafficLog(ip_address, timestamp, log_data)
-        traffic_data.append(log)
-    return traffic_data
-except Exception as e:
-    logger.error(f"Erro ao recuperar dados de tráfego do banco de dados: {str(e)}")
-    return []
 class TrafficLog:
-def init(self, ip_address, timestamp, log_data):
-self.ip_address = ip_address
-self.timestamp = timestamp
-self.log_data = log_data
+    def __init__(self, ip_address, timestamp, log_data):
+        self.ip_address = ip_address
+        self.timestamp = timestamp
+        self.log_data = log_data
 
 def monitor_traffic():
-while True:
-client_socket, address = monitor_socket.accept()
-logger.info(f"Nova conexão de {address[0]}:{address[1]}")
-data = client_socket.recv(1024)
-log = data.decode("utf-8")
-logger.info(f"Log de tráfego recebido: {log}")
-process_log(log)
-client_socket.close()
+    while True:
+        client_socket, address = monitor_socket.accept()
+        logger.info(f"Nova conexão de {address[0]}:{address[1]}")
+        data = client_socket.recv(1024)
+        log = data.decode("utf-8")
+        logger.info(f"Log de tráfego recebido: {log}")
+        process_log(log)
+        client_socket.close()
 
 monitor_thread = threading.Thread(target=monitor_traffic)
 monitor_thread.start()
 
-if name == "main":
-# Configurações e preparações iniciais
-update_model()
-# Outras inicializações...
+if __name__ == "__main__":
+    # Configurações e preparações iniciais
+    update_model()
+    # Outras inicializações...
