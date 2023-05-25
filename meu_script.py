@@ -83,13 +83,90 @@ db_connection = None
 try:
     db_connection = psycopg2.connect(
         host=db_host,
-        port=db_port,
-        database=db_name,
-        user=db_user,
-        password=db_password
-    )
+# Recupera a chave de API da OpenAI
+api_key = None
+
+try:
+    secrets = openai_secret_manager.get_secret("openai")
+    api_key = secrets["api_key"]
 except Exception as e:
-    print(f"Erro ao conectar ao banco de dados: {str(e)}")
+    print(f"Erro ao recuperar a chave de API da OpenAI: {str(e)}")
+
+if api_key:
+    openai.api_key = api_key
+
+# Configuração do logger
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Configuração do servidor MikroTik
+mikrotik_host = "192.168.1.1"
+mikrotik_port = 8728
+mikrotik_username = "admin"
+mikrotik_password = "mypassword"
+
+# Configuração do modelo de detecção de anomalias
+model_path = 'models/anomaly_detector.h5'
+scaler_mean_path = 'models/scaler_mean.npy'
+scaler_std_path = 'models/scaler_std.npy'
+
+# Configuração do servidor de monitoramento
+monitor_host = "192.168.88.248"
+monitor_port = 80
+monitor_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+monitor_socket.bind((monitor_host, monitor_port))
+monitor_socket.listen(5)
+
+# Configuração do banco de dados
+db_host = "localhost"
+db_port = 5432
+db_name = "traffic_db"
+db_user = "db_user"
+db_password = "db_password"
+
+# Lista para armazenar os dados do tráfego de rede
+traffic_data = []
+
+# Informações do servidor SMTP
+smtp_server = "smtp.example.com"
+smtp_port = 587
+smtp_username = "your_username"
+smtp_password = "your_password"
+
+# Carregar modelo de detecção de anomalias e scaler
+anomaly_detector = None
+scaler_mean = None
+scaler_std = None
+scaler = StandardScaler()
+
+def train_anomaly_detection_model():
+    """
+    Treina o modelo de detecção de anomalias e salva os arquivos necessários.
+    """
+    # ... Código para obter os dados de treinamento ...
+
+    # Treinar o modelo de detecção de anomalias
+    anomaly_detector = keras.models.Sequential()
+    # ... Código para definir a arquitetura do modelo ...
+
+    # Treinar o modelo com os dados de treinamento
+    # ...
+
+    # Salvar o modelo
+    anomaly_detector.save(model_path)
+
+    # Obter os dados de treinamento para o scaler
+    data_train = np.array([...])  # Substitua [...] pelos dados de treinamento
+
+    # Criar e ajustar o scaler
+    scaler = StandardScaler()
+    scaler.fit(data_train)
+
+    # Salvar o scaler mean
+    np.save(scaler_mean_path, scaler.mean_)
+
+    # Salvar o scaler std
+    np.save(scaler_std_path, scaler.scale_)
 
 def block_ip(ip_address):
     """
