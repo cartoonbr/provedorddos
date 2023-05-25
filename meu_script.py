@@ -222,10 +222,23 @@ try:
     db_connection.commit()
     logger.info("Dados de tráfego armazenados com sucesso no banco de dados.")
 except Exception as e:
-logger.error(f"Erro ao armazenar dados de tráfego no banco de dados: {str(e)}")
+    logger.error(f"Erro ao armazenar dados de tráfego no banco de dados: {str(e)}")
 
 def retrieve_traffic_data():
-"""
+    """
+    Recupera os dados de tráfego do banco de dados.
+    """
+    try:
+        cursor = db_connection.cursor()
+        cursor.execute("SELECT data FROM traffic_data")
+        rows = cursor.fetchall()
+        traffic_data = [row[0] for row in rows]
+        logger.info("Dados de tráfego recuperados com sucesso.")
+        return traffic_data
+    except Exception as e:
+        logger.error(f"Erro ao recuperar dados de tráfego: {str(e)}")
+        return []
+
 Recupera os dados de tráfego armazenados no banco de dados.
 """
 if db_connection is None:
