@@ -105,8 +105,7 @@ def send_email(subject, message, from_email, to_email):
     body = message
 msg.attach(MIMEText(body, 'plain'))
 
- try:
-    server = smtplib.SMTP(smtp_server, smtp_port)
+try: server = smtplib.SMTP(smtp_server, smtp_port)
     server.starttls()
     server.login(smtp_username, smtp_password)
     server.send_message(msg)
