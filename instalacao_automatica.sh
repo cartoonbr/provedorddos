@@ -7,25 +7,25 @@ sudo apt-get install -y python3-pip python3-venv
 
 # Configuração do ambiente
 echo "Configurando ambiente..."
-mikrotik_host="192.168.1.1"
+mikrotik_host="192.168.88.1"
 mikrotik_port=8728
 mikrotik_username="admin"
-mikrotik_password="mypassword"
+mikrotik_password="inside10"
 
 db_host="localhost"
 db_port=5432
-db_name="meu_banco_de_dados"
-db_username="meu_usuario"
-db_password="minha_senha"
+db_name="ddosprovedor"
+db_username="root"
+db_password="manu031290"
 
-smtp_server="smtp.example.com"
+smtp_server="smtp.gmail.com"
 smtp_port=587
-smtp_username="seu_usuario"
-smtp_password="sua_senha"
+smtp_username="appboxplayer@gmail.com"
+smtp_password="#Manu51381345"
 
 # Configuração da API da OpenAI
 echo "Configurando API da OpenAI..."
-openai_api_key="sua_chave_de_api"
+openai_api_key="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"
 
 # Configuração do ambiente virtual
 echo "Configurando ambiente virtual..."
@@ -38,7 +38,7 @@ pip install numpy tensorflow keras scikit-learn psycopg2-binary openai openai_se
 
 # Configuração do openai_secret_manager
 openai_secret_name="openai"
-openai_secret_key="sua_chave_de_api"
+openai_secret_key="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"
 
 # Configuração da chave de API da OpenAI
 echo '{"api_key": "'"$openai_secret_key"'"}' > openai_secret.json
