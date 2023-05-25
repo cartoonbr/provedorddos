@@ -41,7 +41,7 @@ scaler_std_path = 'models/scaler_std.npy'
 
 # Configuração do servidor de monitoramento
 monitor_host = "192.168.88.248"
-monitor_port = 80
+monitor_port = 8080
 monitor_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 monitor_socket.bind((monitor_host, monitor_port))
 monitor_socket.listen(5)
