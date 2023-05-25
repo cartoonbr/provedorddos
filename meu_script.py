@@ -17,6 +17,18 @@ secrets = openai_secret_manager.get_secret("openai")
 api_key = secrets["api_key"]
 openai.api_key = api_key
 
+# Restante do código...
+
+# Define uma função auxiliar para obter segredos
+def get_secret(key_name):
+    """
+    Obtém um segredo do gerenciador de segredos.
+    """
+    return openai_secret_manager.get_secret(key_name)
+
+# Atualiza a implementação da função get_secret
+openai_secret_manager.get_secret = get_secret
+
 # Configuração do logger
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
