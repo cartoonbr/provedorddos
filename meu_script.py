@@ -220,8 +220,7 @@ try:
         cursor.execute("INSERT INTO traffic_logs (ip_address, timestamp, log_data) VALUES (%s, %s, %s)",
                        (log.ip_address, log.timestamp, log.log_data))
     db_connection.commit()
-    logger.info("Dados de
-tráfego armazenados com sucesso no banco de dados.")
+    logger.info("Dados de tráfego armazenados com sucesso no banco de dados.")
 except Exception as e:
 logger.error(f"Erro ao armazenar dados de tráfego no banco de dados: {str(e)}")
 
