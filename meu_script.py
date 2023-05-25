@@ -104,7 +104,7 @@ def send_email(subject, message, from_email, to_email):
     # Corpo do e-mail
     body = message
     msg.attach(MIMEText
-    body, 'plain'))
+    body, ('plain'))
 
     try:
         server = smtplib.SMTP(smtp_server, smtp_port)
